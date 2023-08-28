@@ -37,7 +37,7 @@ pipeline {
     // }
     parameters {
         choice(name: "update_servers", choices: ['no', 'yes'])
-        choice(name: 'restore_to', backups_list, description: 'дата для отката изменений')
+        choice(name: 'restore_to', choices: backups_list, description: 'дата для отката изменений')
     }
     
     environment {
