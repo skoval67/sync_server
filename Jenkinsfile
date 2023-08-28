@@ -1,21 +1,9 @@
 def backup() {
  //   env.TIME_STAMP = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
-    sh """
+    sh '''
         set -x
         echo ${CURRENT_TIME} 
-        // mkdir -p ${server}_${TIME_STAMP}
-        // ssh -o StrictHostKeyChecking=no -i ${keyfile} jenkins@${ip} "tar cvzf /tmp/${server}_${TIME_STAMP}.tar.gz /var/www/"
-        // scp -o StrictHostKeyChecking=no -i ${keyfile} -r jenkins@${ip}:/tmp/${server}_${TIME_STAMP}.tar.gz .
-        // ssh -o StrictHostKeyChecking=no -i ${keyfile} jenkins@${ip} "rm -rf /tmp/${server}_${TIME_STAMP}.tar.gz"
-        // ls -lah
-        // docker run --rm --user root --name duplicity \
-        // -v "`pwd`/:/data" \
-        // -w /data \
-        // -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-        // -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-        // -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
-        // wernight/duplicity duplicity full --allow-source-mismatch --s3-use-new-style --s3-european-buckets --no-encryption ${server}_${TIME_STAMP}.tar.gz s3://${S3_URL}/${server}
-    """
+    '''
 }
 
 pipeline {
