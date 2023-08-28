@@ -13,7 +13,7 @@ def backups_list = []
 node('master') {
    stage('prepare choices') {
        // read the folder contents
-       def my_choices = sh script: "ls -l /home", returnStdout:true
+       def my_choices = sh script: "ls /tmp/*.tar.gz", returnStdout:true
        // make a list out of it - I haven't tested this!
        backups_list = my_choices.trim().split("\n")
    }
