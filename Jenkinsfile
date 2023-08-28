@@ -3,9 +3,20 @@ def returnBackupList() {
     //     set -x
     //     ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"
     // '''
-    ret_value = "Option1\nOption2" //['nginx_backup_2023_08_28_09_16_47', 'nginx_backup_2023_08_28_09_17_56']
+    ret_value = $(ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz")
     //return "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'".execute().text
     return ret_value
+}
+
+def backups_list = []
+
+node('master') {
+   stage('prepare choices') {
+       // read the folder contents
+       def my_choices = sh script: "ls -l /home", returnStdout:true
+       // make a list out of it - I haven't tested this!
+       backups_list = my_choices.trim().split("\n")
+   }
 }
 
 def backup() {
@@ -26,7 +37,7 @@ pipeline {
     // }
     parameters {
         choice(name: "update_servers", choices: ['no', 'yes'])
-        choice(name: 'restore_to', choices: returnBackupList(), description: 'дата для отката изменений')
+        choice(name: 'restore_to', backups_list, description: 'дата для отката изменений')
     }
     
     environment {
