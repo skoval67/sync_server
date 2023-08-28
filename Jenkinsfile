@@ -1,3 +1,23 @@
+def backup() {
+ //   env.TIME_STAMP = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
+    sh """
+        set -x
+        echo ${CURRENT_TIME} 
+        // mkdir -p ${server}_${TIME_STAMP}
+        // ssh -o StrictHostKeyChecking=no -i ${keyfile} jenkins@${ip} "tar cvzf /tmp/${server}_${TIME_STAMP}.tar.gz /var/www/"
+        // scp -o StrictHostKeyChecking=no -i ${keyfile} -r jenkins@${ip}:/tmp/${server}_${TIME_STAMP}.tar.gz .
+        // ssh -o StrictHostKeyChecking=no -i ${keyfile} jenkins@${ip} "rm -rf /tmp/${server}_${TIME_STAMP}.tar.gz"
+        // ls -lah
+        // docker run --rm --user root --name duplicity \
+        // -v "`pwd`/:/data" \
+        // -w /data \
+        // -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+        // -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+        // -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
+        // wernight/duplicity duplicity full --allow-source-mismatch --s3-use-new-style --s3-european-buckets --no-encryption ${server}_${TIME_STAMP}.tar.gz s3://${S3_URL}/${server}
+    """
+}
+
 pipeline {
     agent any
     // options {
@@ -5,13 +25,14 @@ pipeline {
     //     timeout(time: 20, unit: 'MINUTES')
     //     disableConcurrentBuilds()
     // }
-    parameters {
+    // parameters {
         // choice(name: "update_servers", choices: ['no', 'yes'])
         // choice(name: 'grpr21', choices: returnBackupListPR21(), description: 'дата для отката изменений grpr21')
         // choice(name: 'grpr31', choices: returnBackupListPR31(), description: 'дата для отката изменений grpr31')
         // choice(name: 'grpr32', choices: returnBackupListPR32(), description: 'дата для отката изменений grpr32')
-    }
+    // }
     environment {
+        CURRENT_TIME = $(date +%d-%m-%Y_%H:%M:%S)
     //   AWS_ACCESS_KEY_ID = credentials('fonbet_gr_aws_access_key_id')
     //   AWS_SECRET_ACCESS_KEY = credentials('fonbet_gr_aws_secret_access_key')
     //   AWS_DEFAULT_REGION = "eu-south-1"
@@ -36,11 +57,12 @@ pipeline {
             // }            
             steps {
             //     withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
-            //         script {
+                script {
             //             servers.each{server,ip->
-            //                 backup(server, ip)
+                    backup()
             //             }
-            //         }
+
+                }
             //     }
             }
         }
