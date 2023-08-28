@@ -3,7 +3,7 @@ def returnBackupList() {
     //     set -x
     //     ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"
     // '''
-    ret_value = ['nginx_backup_2023_08_28_09_16_47', 'nginx_backup_2023_08_28_09_17_56']
+    ret_value = "Option1\nOption2" //['nginx_backup_2023_08_28_09_16_47', 'nginx_backup_2023_08_28_09_17_56']
     //return "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'".execute().text
     return ret_value
 }
