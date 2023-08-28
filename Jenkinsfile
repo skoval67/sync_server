@@ -32,7 +32,7 @@ pipeline {
         // choice(name: 'grpr32', choices: returnBackupListPR32(), description: 'дата для отката изменений grpr32')
     // }
     environment {
-        CURRENT_TIME = $(date +%d-%m-%Y_%H:%M:%S)
+        CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim() //$(date +%d-%m-%Y_%H:%M:%S)
     //   AWS_ACCESS_KEY_ID = credentials('fonbet_gr_aws_access_key_id')
     //   AWS_SECRET_ACCESS_KEY = credentials('fonbet_gr_aws_secret_access_key')
     //   AWS_DEFAULT_REGION = "eu-south-1"
