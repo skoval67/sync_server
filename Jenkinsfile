@@ -1,12 +1,9 @@
 def backup() {
     sh '''
-        set +x
-        echo ${CURRENT_TIME} 
-        echo $(pwd)
+        set -x
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo tar cvzf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz /etc/nginx"
         scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr:/tmp/nginx_backup_${CURRENT_TIME}.tar.gz admin@10.128.0.3:/tmp
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo rm -rf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz"
-        echo $(hostname)
     '''
 }
 
@@ -17,12 +14,12 @@ pipeline {
     //     timeout(time: 20, unit: 'MINUTES')
     //     disableConcurrentBuilds()
     // }
-    // parameters {
-        // choice(name: "update_servers", choices: ['no', 'yes'])
+    parameters {
+        choice(name: "update_servers", choices: ['no', 'yes'])
         // choice(name: 'grpr21', choices: returnBackupListPR21(), description: 'дата для отката изменений grpr21')
         // choice(name: 'grpr31', choices: returnBackupListPR31(), description: 'дата для отката изменений grpr31')
         // choice(name: 'grpr32', choices: returnBackupListPR32(), description: 'дата для отката изменений grpr32')
-    // }
+    }
     
     environment {
         CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
