@@ -1,6 +1,5 @@
 def backup() {
     sh '''
-        //set -x
         echo ${CURRENT_TIME} 
         echo $(hostname)
     '''
