@@ -13,9 +13,9 @@ def backups_list = []
 node('master') {
    stage('prepare choices') {
        // read the folder contents
-       def my_choices = sh script: "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'", returnStdout:true
+       def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout:true
        // make a list out of it - I haven't tested this!
-       backups_list = my_choices.trim().split("\n")
+       backups_list = my_choices.trim() //.split("\n")
    }
 }
 
