@@ -1,8 +1,8 @@
 def backup() {
- //   env.TIME_STAMP = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
     sh '''
-        set -x
+        //set -x
         echo ${CURRENT_TIME} 
+        echo $(hostname)
     '''
 }
 
@@ -19,21 +19,11 @@ pipeline {
         // choice(name: 'grpr31', choices: returnBackupListPR31(), description: 'дата для отката изменений grpr31')
         // choice(name: 'grpr32', choices: returnBackupListPR32(), description: 'дата для отката изменений grpr32')
     // }
+    
     environment {
-        CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim() //$(date +%d-%m-%Y_%H:%M:%S)
-    //   AWS_ACCESS_KEY_ID = credentials('fonbet_gr_aws_access_key_id')
-    //   AWS_SECRET_ACCESS_KEY = credentials('fonbet_gr_aws_secret_access_key')
-    //   AWS_DEFAULT_REGION = "eu-south-1"
-    //   S3_URL = "fonbet-gr" 
-    //   //S3_BUCKET = "fonbet-gr"
-    //   WORK_FOLDER = "/var/www"
-    //   //CONFIG_FOLDER = 'filelist'
-    //   IP_SERVER = '10.0.2.11'
-    //   SERVER_USERNAME = 'jenkins'
-    //   SERVER_PROD_IP = '10.253.53.60' // prodtest-deb
-    //   SERVER_PROD_FOLDER = "/opt/grpr_prod"
-      
+        CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
     }
+
     stages {
         stage("Create backup") {
             // when { 
@@ -44,14 +34,9 @@ pipeline {
             //     }
             // }            
             steps {
-            //     withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
                 script {
-            //             servers.each{server,ip->
                     backup()
-            //             }
-
                 }
-            //     }
             }
         }
 
