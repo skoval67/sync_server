@@ -34,7 +34,7 @@ pipeline {
             //         expression{params.grpr32 == ''}
             //     }
             // }            
-            // steps {
+            steps {
             //     withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
             //         script {
             //             servers.each{server,ip->
@@ -42,7 +42,7 @@ pipeline {
             //             }
             //         }
             //     }
-            // }
+            }
         }
 
         // stage("Sync") {
