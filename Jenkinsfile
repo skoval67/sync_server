@@ -61,7 +61,7 @@ pipeline {
                     restore_config(params.restore_to)
                 }
                 script {
-                    sh script: echo "${params.restore_to}", returnStdout: true
+                    sh script: echo "${params.restore_to}"
                 }
             }
         }
