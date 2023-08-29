@@ -58,7 +58,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh script: echo "${params.restore_to}" , returnStdout:true
+                    sh script: echo "${params.restore_to}"
                     restore_config(params.restore_to)
                 }
             }
