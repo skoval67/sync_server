@@ -60,7 +60,7 @@ pipeline {
                 script {
                     sh '''
                         echo "${CURRENT_TIME}"
-                        echo "${params.update_server}"
+                        echo "${params.update_server.value}"
                         #echo ${params.restore_to}
                     '''
                 }
