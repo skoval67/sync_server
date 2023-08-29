@@ -18,6 +18,7 @@ def backup_config() {
 
 def restore_config(filename) {
     sh '''
+        set -x
         echo ${filename}
     '''
 }
@@ -31,7 +32,7 @@ pipeline {
     // }
     parameters {
         choice(name: "update_servers", choices: ['yes', 'no'])
-        choice(name: 'restore_to', choices: backups_list, description: 'бекап для отката изменений')
+        choice(name: "restore_to", choices: backups_list, description: "бекап для отката изменений")
     }
     
     environment {
