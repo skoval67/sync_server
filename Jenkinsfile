@@ -58,13 +58,9 @@ pipeline {
                 expression{params.update_servers == 'no'}
             }
             steps {
-                script {
-                    sh '''
-                        echo "${CURRENT_TIME}"
-                        echo "$update_server"
-                        #echo ${params.restore_to}
-                    '''
-                }
+                echo "${CURRENT_TIME}"
+                echo "$update_server"
+                echo ${params.restore_to}
                 script {
                     restore_config(params.restore_to)
                 }
