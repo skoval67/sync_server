@@ -56,7 +56,9 @@ pipeline {
                 expression{params.update_servers == 'no'}
             }
             steps {
-                restore_config(params.restore_to)
+                script {
+                    restore_config(params.restore_to)
+                }
             }
         }
     }
