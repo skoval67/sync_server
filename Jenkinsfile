@@ -60,12 +60,12 @@ pipeline {
                 script {
                     sh '''
                         echo "${CURRENT_TIME}"
-                        echo "\${update_server}"
-                        echo "\${env.restore_to}"
+                        echo $params.update_server
+                        echo $params.restore_to
                     '''
                 }
                 script {
-                    restore_config(params.restore_to)
+                    restore_config($params.restore_to)
                 }
             }
         }
