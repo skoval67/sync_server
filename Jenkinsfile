@@ -64,9 +64,9 @@ pipeline {
                         #echo ${params.restore_to}
                     '''
                 }
-                script {
-                    //restore_config(${params.restore_to})
-                }
+                // script {
+                //     restore_config(${params.restore_to})
+                // }
             }
         }
     }
