@@ -21,7 +21,7 @@ def restore_config(filename) {
     sh """
         set -x
         echo "${filename}"
-        ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz /etc"
+        ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz -C /etc"
     """
 }
 
