@@ -18,7 +18,7 @@ def backup_config() {
 }
 
 def restore_config(filename) {
-    sh '''
+    sh returnStdout:true, script: '''
         set -x
 
         "echo \${fname}"
