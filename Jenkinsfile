@@ -57,7 +57,12 @@ pipeline {
             }
             steps {
                 script {
-                    restore_config(params.restore_to)
+                    try {
+                        restore_config(params.restore_to)
+                    }
+                    catch (exc) {
+                        throw exc
+                    }
                 }
             }
         }
