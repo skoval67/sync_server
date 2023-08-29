@@ -19,7 +19,7 @@ def backup_config() {
 def restore_config(filename) {
     sh '''
         set -x
-        echo ${filename}
+        echo \${filename}
     '''
 }
 
