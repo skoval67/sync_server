@@ -60,7 +60,7 @@ pipeline {
             steps {
                 //echo "${CURRENT_TIME}"
                 //echo "$update_server"
-                //echo "${params.restore_to}"
+                echo "${params.restore_to}"
                 //script {
                 restore_config("${params.restore_to}")
                 //}
