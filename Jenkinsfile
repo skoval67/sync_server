@@ -20,7 +20,7 @@ def backup_config() {
 def restore_config(filename) {
     sh returnStdout:true, script: '''
         set -x
-        echo "${filename}"
+        echo "$filename"
         #scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz /etc"
     '''
 }
