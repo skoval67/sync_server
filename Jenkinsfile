@@ -55,14 +55,8 @@ pipeline {
             when { 
                 expression{params.update_servers == 'no'}
             }
-            // steps {
-            //     restore_config(params.restore_to)
-            // }
-            try {
-                sh 'exit 1'
-            }
-            catch (exc) {
-                throw exc
+            steps {
+                restore_config(params.restore_to)
             }
         }
     }
