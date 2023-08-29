@@ -20,6 +20,7 @@ def backup_config() {
 def restore_config(filename) {
     sh returnStdout:true, script: '''
         set -x
+        echo "${filename}"
         scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz /etc"
     '''
 }
@@ -60,13 +61,13 @@ pipeline {
                 script {
                     sh '''
                         echo "${CURRENT_TIME}"
-                        echo "${params.update_server.value}"
+                        echo params.update_server
                         #echo ${params.restore_to}
                     '''
                 }
-                // script {
-                //     restore_config(${params.restore_to})
-                // }
+                script {
+                    restore_config(params.restore_to)
+                }
             }
         }
     }
