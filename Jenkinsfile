@@ -22,7 +22,7 @@ def restore_config(filename) {
         set -x
 
         "echo \${fname}"
-    ''', returnStdout: true
+    '''
 }
 
 pipeline {
