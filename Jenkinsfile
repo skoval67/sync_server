@@ -62,7 +62,7 @@ pipeline {
                 //echo "$update_server"
                 echo "${params.restore_to}"
                 //script {
-                x1 = "${params.restore_to}"
+                sh x1 = "${params.restore_to}"
                 restore_config(x1)
                 //}
             }
