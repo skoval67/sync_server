@@ -1,11 +1,11 @@
 def backups_list = []
 
-node('master') {
-   stage('prepare backups list') {
-       def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout:true
-       backups_list = my_choices.trim()  //tmp\/(.*).tar.gz
-   }
-}
+// node('master') {
+//    stage('prepare backups list') {
+//        def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout:true
+//        backups_list = my_choices.trim()  //tmp\/(.*).tar.gz
+//    }
+// }
 
 def backup() {
     sh '''
