@@ -56,7 +56,13 @@ pipeline {
                 expression{params.update_servers == 'no'}
             }
             steps {
-                restore_config(params.restore_to)
+                try {
+                    restore_config(params.restore_to)
+                }
+                catch (exc) {
+                    echo "Something didn't work and got some exceptions"
+                    throw
+                }
             }
         }
     }
