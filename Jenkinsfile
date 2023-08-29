@@ -16,10 +16,11 @@ def backup_config() {
     '''
 }
 
-def restore_config(filename) {
+def restore_config(fname) {
     sh '''
         set -x
-        echo \${filename}
+        echo \${fname}
+        echo "${params.restore_to}"
     '''
 }
 
