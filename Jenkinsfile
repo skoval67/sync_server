@@ -21,7 +21,7 @@ def restore_config(filename) {
     sh returnStdout:true, script: '''
         set -x
 
-        "echo \${fname}"
+        echo \${filename}
     '''
 }
 
