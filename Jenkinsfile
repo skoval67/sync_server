@@ -51,24 +51,22 @@ pipeline {
             }
         }
 
-        try {
-
         stage("Make restore") {
             when { 
                 expression{params.update_servers == 'no'}
             }
-            steps {
-                restore_config(params.restore_to)
+            // steps {
+            //     restore_config(params.restore_to)
+            // }
+            try {
+                sh 'exit 1'
+            }
+            catch (exc) {
+                throw exc
             }
         }
-        }
-        catch (exc) {
-            echo "Something didn't work and got some exceptions"
-            //throw
-        }
-
     }
-    
+
     post {
         cleanup {
             deleteDir() /* clean up our workspace */
