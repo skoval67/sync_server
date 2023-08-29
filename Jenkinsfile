@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-#                        echo ${params.restore_to}
+                        echo ${params.restore_to}
 
                     '''
                 }
