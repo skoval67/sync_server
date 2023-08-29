@@ -57,12 +57,12 @@ pipeline {
                 expression{params.update_servers == 'no'}
             }
             steps {
-                // script {
-                //     sh '''
-                //         echo ${params.restore_to}
+                script {
+                    sh '''
+#                        echo ${params.restore_to}
 
-                //     '''
-                // }
+                    '''
+                }
 
                 script {
                     restore_config(params.restore_to)
