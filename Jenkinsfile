@@ -58,7 +58,11 @@ pipeline {
             }
             steps {
                 script {
-                    sh script: echo "${params.restore_to}"
+                    sh '''
+                        echo "${CURRENT_TIME}"
+                        echo "${params.update_server}"
+                        echo "${params.restore_to}"
+                    '''
                 }
                 script {
                     restore_config(params.restore_to)
