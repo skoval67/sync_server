@@ -21,7 +21,7 @@ def restore_config(filename) {
     sh """
         set -x
         echo "${filename}"
-        #scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz /etc"
+        scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzf /tmp/${filename}.tar.gz /etc"
     """
 }
 
@@ -55,7 +55,7 @@ pipeline {
 
         stage("Make restore") {
             when { 
-                expression{!params.update_servers}
+                expression{params.update_servers == 'no'}
             }
             steps {
                 restore_config(params.restore_to)
@@ -63,9 +63,9 @@ pipeline {
         }
     }
     
-    // post {
-    //     cleanup {
-    //         deleteDir() /* clean up our workspace */
-    //     }
-    // }
+    post {
+        cleanup {
+            deleteDir() /* clean up our workspace */
+        }
+    }
 }
