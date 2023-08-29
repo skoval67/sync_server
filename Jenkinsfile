@@ -55,16 +55,10 @@ pipeline {
 
         stage("Make restore") {
             when { 
-                expression{params.update_servers == 'no'}
+                expression{!params.update_servers}
             }
             steps {
-                //echo "${CURRENT_TIME}"
-                //echo "$update_server"
-                echo "${params.restore_to}"
-                //script {
-                //sh x1 = "${params.restore_to}"
                 restore_config(params.restore_to)
-                //}
             }
         }
     }
