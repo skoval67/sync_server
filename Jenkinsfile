@@ -7,12 +7,18 @@ node('master') {
    }
 }
 
-def backup() {
+def backup_config() {
     sh '''
         set -x
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo tar cvzf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz /etc/nginx"
         scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr:/tmp/nginx_backup_${CURRENT_TIME}.tar.gz admin@10.128.0.3:/tmp
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo rm -rf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz"
+    '''
+}
+
+def restore_config(filename) {
+    sh '''
+        echo ${filename}
     '''
 }
 
@@ -24,7 +30,7 @@ pipeline {
     //     disableConcurrentBuilds()
     // }
     parameters {
-        choice(name: "update_servers", choices: ['no', 'yes'])
+        choice(name: "update_servers", choices: ['yes', 'no'])
         choice(name: 'restore_to', choices: backups_list, description: 'бекап для отката изменений')
     }
     
@@ -34,70 +40,31 @@ pipeline {
 
     stages {
         stage("Create backup") {
-            // when { 
-            //     allOf {
-            //         expression{params.grpr21 == ''}
-            //         expression{params.grpr31 == ''}
-            //         expression{params.grpr32 == ''}
-            //     }
-            // }            
+            when { 
+                expression{params.update_servers == 'yes'}
+            }            
             steps {
                 script {
-                    backup()
+                    backup_config()
                 }
             }
         }
 
-        // stage("Sync") {
-        //     when { 
-        //         allOf {
-        //             expression{params.update_servers == 'yes'}
-        //             expression{params.grpr21 == ''}
-        //             expression{params.grpr31 == ''}
-        //             expression{params.grpr32 == ''}
-        //         }
-        //     } 
-        //     steps {
-        //         withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
-        //             script {
-        //                 servers.each{server,ip->
-        //                     syncserver(server, ip)
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Make restore") {
+            when { 
+                expression{params.update_servers == 'no'}
+            }
+            steps {
+                script {
+                    restore_config(params.restore_to)
+                }
+            }
+        }
 
-        // Переделать в один этап.
-    //     stage("restore to date grpr21") {
-    //         when { 
-    //              expression{params.grpr21 != ''}
-    //         }
-    //         steps {
-    //             withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
-    //                 script {
-    //                     restorebackup("grpr21", "ip", params.grpr21 ) // IP 10.253.49.2
-    //                 }
-    //             }
-    //         }
-    //     }
-    
-
-    //     stage("Update filelist") {
-    //         steps {
-    //             withCredentials([sshUserPrivateKey(credentialsId: "fonbet", keyFileVariable: 'keyfile')]) {
-    //                 script {
-    //                     servers.each{server, ip->
-    //                         getBackupList(server, ip)
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // post {
-    //     cleanup {
-    //         deleteDir() /* clean up our workspace */
-    //     }
-  }
+        post {
+            cleanup {
+                deleteDir() /* clean up our workspace */
+            }
+        } 
+    }
 }
