@@ -25,11 +25,11 @@ def restore_config(filename) {
 
 pipeline {
     agent any
-    // options {
-    //     buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
-    //     timeout(time: 20, unit: 'MINUTES')
-    //     disableConcurrentBuilds()
-    // }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
+        timeout(time: 20, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
     parameters {
         choice(name: "update_servers", choices: ['yes', 'no'])
         choice(name: "restore_to", choices: backups_list, description: "бекап для отката изменений")
