@@ -7,7 +7,7 @@ def backups_list = []
 //    }
 // }
 
-def update_backups_list = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
+def update_backups_list = ["one", "two"]//sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
 
 def backup_config() {
     sh '''
