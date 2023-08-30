@@ -1,11 +1,13 @@
 def backups_list = []
 
-node('master') {
-   stage('prepare backups list') {
-       def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
-       backups_list = my_choices.trim()
-   }
-}
+// node('master') {
+//    stage('prepare backups list') {
+//        def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
+//        backups_list = my_choices.trim()
+//    }
+// }
+
+def update_backups_list = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
 
 def backup_config() {
     sh '''
@@ -24,7 +26,7 @@ def restore_config(filename) {
 }
 
 pipeline {
-    agent any
+    agent none
     options {
         buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
         timeout(time: 20, unit: 'MINUTES')
@@ -41,7 +43,15 @@ pipeline {
     }
 
     stages {
+        stage("get backups list") {
+            agent {
+                label 'master'
+            }
+            backups_list = update_backups_list()
+        }
+
         stage("Create backup") {
+            agent any
             when { 
                 expression{params.update_config == 'yes'}
             }            
@@ -58,6 +68,7 @@ pipeline {
         }
 
         stage("Make restore") {
+            agent any
             when { 
                 expression{params.update_config == 'no'}
             }
@@ -73,6 +84,13 @@ pipeline {
             }
         }
     }
+
+        stage("update backups list") {
+            agent {
+                label 'master'
+            }
+            backups_list = update_backups_list()
+        }
 
     post {
         cleanup {
