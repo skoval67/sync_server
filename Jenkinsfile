@@ -47,7 +47,9 @@ pipeline {
             agent {
                 label 'master'
             }
-            backups_list = update_backups_list()
+            steps {
+                backups_list = update_backups_list()
+            }
         }
 
         stage("Create backup") {
@@ -89,7 +91,9 @@ pipeline {
             agent {
                 label 'master'
             }
-            backups_list = update_backups_list()
+            steps {
+                backups_list = update_backups_list()
+            }
         }
 
     post {
