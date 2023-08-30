@@ -49,7 +49,7 @@ pipeline {
             }
             steps {
                 script {
-                    backups_list = update_backups_list()
+                    backups_list = update_backups_list
                 }
             }
         }
@@ -89,18 +89,18 @@ pipeline {
         }
 
 
-        stage("update backups list") {
-            agent {
-                label 'master'
-            }
-            steps {
-                script{
-                    backups_list = update_backups_list()
-                }
-            }
-        }
+        // stage("update backups list") {
+        //     agent {
+        //         label 'master'
+        //     }
+        //     steps {
+        //         script{
+        //             backups_list = update_backups_list()
+        //         }
+        //     }
+        // }
     }
-    
+
     post {
         cleanup {
             deleteDir() /* clean up our workspace */
