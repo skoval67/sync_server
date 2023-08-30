@@ -26,7 +26,7 @@ def restore_config(filename) {
 }
 
 pipeline {
-    agent none
+    agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
         timeout(time: 20, unit: 'MINUTES')
