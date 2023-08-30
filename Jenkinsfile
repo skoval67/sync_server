@@ -1,13 +1,5 @@
 def backups_list = []
 
-// node('master') {
-//    stage('prepare backups list') {
-//        //def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
-//        //backups_list = my_choices.trim()
-//        backups_list = update_backups_list()
-//    }
-// }
-
 def update_backups_list() {
     return sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout: true)
 }
@@ -26,6 +18,14 @@ def restore_config(filename) {
     sh """
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzvf /tmp/${filename}.tar.gz -C /"
     """
+}
+
+node('master') {
+   stage('prepare backups list') {
+       //def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
+       //backups_list = my_choices.trim()
+       backups_list = update_backups_list()
+   }
 }
 
 pipeline {
@@ -56,7 +56,6 @@ no - будет восстановлен конфиг nginx из резервн�
                 script {
                     try {
                         backup_config()
-                        backups_list = update_backups_list()
                     }
                     catch (exc) {
                         throw exc
@@ -87,12 +86,4 @@ no - будет восстановлен конфиг nginx из резервн�
             deleteDir() /* clean up our workspace */
         }
     }
-}
-
-node('master') {
-   stage('prepare backups list') {
-       //def my_choices = sh script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"', returnStdout:true
-       //backups_list = my_choices.trim()
-       backups_list = update_backups_list()
-   }
 }
