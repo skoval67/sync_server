@@ -9,8 +9,8 @@ node('master') {
 }
 
 def update_backups_list() {
-    //return 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"'.execute().text
-    return 'cat /var/jenkins_home/backus_list'.execute().text
+    return 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz" | sed -nE "s/\\/tmp\\/(.+).tar.gz/\\1/p"'.execute().text
+    //return 'cat /var/jenkins_home/backus_list'.execute().text
 }
 
 def backup_config() {
