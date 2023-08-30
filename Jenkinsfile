@@ -28,7 +28,9 @@ def restore_config(filename) {
 }
 
 pipeline {
-    agent any
+    agent {
+        label 'master'
+    }
     options {
         buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
         timeout(time: 20, unit: 'MINUTES')
@@ -46,9 +48,9 @@ pipeline {
 
     stages {
         stage("get backups list") {
-            agent {
-                label 'master'
-            }
+            // agent {
+            //     label 'master'
+            // }
             steps {
                 script {
                     backups_list = update_backups_list()
@@ -57,7 +59,7 @@ pipeline {
         }
 
         stage("Create backup") {
-            agent any
+            // agent any
             when { 
                 expression{params.update_config == 'yes'}
             }            
@@ -74,7 +76,7 @@ pipeline {
         }
 
         stage("Make restore") {
-            agent any
+            // agent any
             when { 
                 expression{params.update_config == 'no'}
             }
