@@ -31,7 +31,8 @@ pipeline {
         disableConcurrentBuilds()
     }
     parameters {
-        choice(name: "update_servers", choices: ['yes', 'no'])
+        choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
+          no - будет восстановлен конфиг nginx из резервной копии, указанной в параметре restore_to")
         choice(name: "restore_to", choices: backups_list, description: "бекап для отката изменений")
     }
     
@@ -42,18 +43,23 @@ pipeline {
     stages {
         stage("Create backup") {
             when { 
-                expression{params.update_servers == 'yes'}
+                expression{params.update_config == 'yes'}
             }            
             steps {
                 script {
-                    backup_config()
+                    try {
+                        backup_config()
+                    }
+                    catch (exc) {
+                        throw exc
+                    }
                 }
             }
         }
 
         stage("Make restore") {
             when { 
-                expression{params.update_servers == 'no'}
+                expression{params.update_config == 'no'}
             }
             steps {
                 script {
