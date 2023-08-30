@@ -87,7 +87,7 @@ pipeline {
                 }
             }
         }
-    }
+
 
         stage("update backups list") {
             agent {
@@ -99,7 +99,8 @@ pipeline {
                 }
             }
         }
-
+    }
+    
     post {
         cleanup {
             deleteDir() /* clean up our workspace */
