@@ -48,9 +48,6 @@ pipeline {
 
     stages {
         stage("get backups list") {
-            // agent {
-            //     label 'master'
-            // }
             steps {
                 script {
                     backups_list = update_backups_list()
@@ -59,7 +56,6 @@ pipeline {
         }
 
         stage("Create backup") {
-            // agent any
             when { 
                 expression{params.update_config == 'yes'}
             }            
@@ -76,7 +72,6 @@ pipeline {
         }
 
         stage("Make restore") {
-            // agent any
             when { 
                 expression{params.update_config == 'no'}
             }
@@ -93,16 +88,13 @@ pipeline {
         }
 
 
-        // stage("update backups list") {
-        //     agent {
-        //         label 'master'
-        //     }
-        //     steps {
-        //         script{
-        //             backups_list = update_backups_list()
-        //         }
-        //     }
-        // }
+        stage("update backups list") {
+            steps {
+                script{
+                    backups_list = update_backups_list()
+                }
+            }
+        }
     }
 
     post {
