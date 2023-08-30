@@ -48,7 +48,9 @@ pipeline {
                 label 'master'
             }
             steps {
-                backups_list = update_backups_list()
+                script {
+                    backups_list = update_backups_list()
+                }
             }
         }
 
@@ -92,7 +94,9 @@ pipeline {
                 label 'master'
             }
             steps {
-                backups_list = update_backups_list()
+                script{
+                    backups_list = update_backups_list()
+                }
             }
         }
 
