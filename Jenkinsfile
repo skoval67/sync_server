@@ -1,9 +1,10 @@
-//def backups_list = []
+def backups_list = []
 
 def update_backups_list() {
-    return sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout: true)
+    //return sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout: true)
     //return "echo ${output} | sed -nE 's/\\/tmp\\/(.+).tar.gz/\\1/p'".execute().text
     //return "echo ${output}".execute().text
+    return "one/ntwo/nthree"
 }
 
 def backup_config() {
@@ -39,13 +40,11 @@ pipeline {
     }
     environment {
         CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
-        backups_list = sh(script: "echo \$(ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz')", returnStdout: true) // update_backups_list()
-        
     }
     parameters {
         choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
 no - будет восстановлен конфиг nginx из резервной копии, указанной в параметре restore_to")
-        choice(name: "restore_to", choices: "${env.backups_list}", description: "бекап для отката изменений")
+        choice(name: "restore_to", choices: update_backups_list(), description: "бекап для отката изменений")
     }
     
     stages {
