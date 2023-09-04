@@ -45,7 +45,8 @@ no - будет восстановлен конфиг nginx из резервн�
     
     environment {
         CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
-        backups_list = sh(script: "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'", returnStdout: true) // update_backups_list()
+        //backups_list = sh(script: "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'", returnStdout: true) // update_backups_list()
+        backups_list = sh(script: "echo \$(ls /tmp/*.tar.gz)", returnStdout: true) // update_backups_list()
     }
 
     stages {
