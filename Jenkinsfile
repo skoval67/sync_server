@@ -40,7 +40,7 @@ pipeline {
     parameters {
         choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
 no - будет восстановлен конфиг nginx из резервной копии, указанной в параметре restore_to")
-        choice(name: "restore_to", choices: ${backups_list}, description: "бекап для отката изменений")
+        choice(name: "restore_to", choices: "${backups_list}", description: "бекап для отката изменений")
     }
     
     environment {
