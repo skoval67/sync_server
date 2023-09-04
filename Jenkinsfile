@@ -37,18 +37,17 @@ pipeline {
         timeout(time: 20, unit: 'MINUTES')
         disableConcurrentBuilds()
     }
+    environment {
+        CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
+        backups_list = sh(script: "echo \$(ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz')", returnStdout: true) // update_backups_list()
+        
+    }
     parameters {
         choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
 no - будет восстановлен конфиг nginx из резервной копии, указанной в параметре restore_to")
         choice(name: "restore_to", choices: "${backups_list}", description: "бекап для отката изменений")
     }
     
-    environment {
-        CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
-        backups_list = sh(script: "echo \$(ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz')", returnStdout: true) // update_backups_list()
-        
-    }
-
     stages {
         stage("Create backup") {
             when { 
