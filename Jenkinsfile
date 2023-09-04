@@ -1,4 +1,4 @@
-def backups_list = []
+//def backups_list = []
 
 def update_backups_list() {
     return sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout: true)
