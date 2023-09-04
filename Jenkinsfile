@@ -1,9 +1,9 @@
 def backups_list = []
 
 def update_backups_list() {
-    output = sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout: true)
+    return sh(script: 'ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "ls /tmp/*.tar.gz"', returnStdout: true)
     //return "echo ${output} | sed -nE 's/\\/tmp\\/(.+).tar.gz/\\1/p'".execute().text
-    return "echo ${output}".execute().text
+    //return "echo ${output}".execute().text
 }
 
 def backup_config() {
