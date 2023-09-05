@@ -16,6 +16,7 @@ def backup_config() {
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo tar cvzf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz /etc/nginx"
         scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr:/tmp/nginx_backup_${CURRENT_TIME}.tar.gz admin@10.128.0.3:/tmp
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo rm -rf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz"
+        #SEARCH_DIR = $(sed -E 's/\//\\\//g' <<< "${BACKUP_DIR}")
         # make sync here
     '''
 }
@@ -43,6 +44,8 @@ pipeline {
     }
     environment {
         CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
+        BACKUP_DIR = "/opt/backup"
+        SEARCH_DIR = sh(script: "sed -E 's/\//\\\//g' <<< ${BACKUP_DIR}", returnStdout: true).trim()
     }
     parameters {
         choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
