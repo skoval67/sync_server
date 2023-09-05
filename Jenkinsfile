@@ -44,7 +44,7 @@ pipeline {
     environment {
         CURRENT_TIME = sh(script: "echo \$(date +%Y_%m_%d_%H_%M_%S)", returnStdout: true).trim()
         BACKUP_DIR = "/opt/backup"
-        SEARCH_DIR = sh(script: "sed -nE 's/\\//\\\//g' <<< ${BACKUP_DIR}", returnStdout: true).trim()
+        SEARCH_DIR = sh(script: "sed -nE 's/\\//\\\\//g' <<< ${BACKUP_DIR}", returnStdout: true).trim()
     }
     parameters {
         choice(name: "update_config", choices: ['yes', 'no'], description: "yes - будет создана резервная копия текущего конфига nginx и его синхронизация с другого сервера,\n \
