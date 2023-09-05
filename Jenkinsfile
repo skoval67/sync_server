@@ -88,7 +88,7 @@ no - будет восстановлен конфиг nginx из резервн�
                 expression{params.update_config == 'refresh'}
             }
             steps {
-                sh 'do nothing'
+                sh '#do nothing'
             }
         }
     }
