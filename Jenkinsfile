@@ -84,6 +84,15 @@ no - будет восстановлен конфиг nginx из резервн�
                 }
             }
         }
+    
+        stage("Refresh backups lists parameter") {
+            when {
+                expression{params.update_config == 'refresh'}
+            }
+            steps {
+                sh 'do nothing'
+            }
+        }
     }
 
     post {
