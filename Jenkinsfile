@@ -4,10 +4,6 @@ def update_backups_list() {
     node {
         return sh(script: "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 ls /tmp/*.tar.gz | sed -nE 's/\\/tmp\\/(.+).tar.gz/\\1/p'", returnStdout: true)
     }
-    //output = sh(script: "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 'ls /tmp/*.tar.gz'", returnStdout: true)
-    //return "echo ${output} | sed -nE 's/\\/tmp\\/(.+).tar.gz/\\1/p'".execute().text
-    //return "echo ${output}".execute().text
-    //return '''ls /tmp/*.tar.gz'''.execute().text
 }
 
 def backup_config() {
@@ -17,25 +13,19 @@ def backup_config() {
         scp -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr:/tmp/nginx_backup_${CURRENT_TIME}.tar.gz admin@10.128.0.3:/tmp
         ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo rm -rf /tmp/nginx_backup_${CURRENT_TIME}.tar.gz"
         # make sync here
+        ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@websrvr "sudo nginx -t && echo success"
     '''
 }
 
 def restore_config(filename) {
-    sh """
-        ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzvf /tmp/${filename}.tar.gz -C /"
-    """
+    fname = ${filename}
+    sh '''
+        ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/secrets/id_ed25519 admin@10.128.0.3 "sudo tar xzvf /tmp/${fname}.tar.gz -C /"
+    '''
 }
 
-// node('master') {
-//    stage('prepare backups list') {
-//        backups_list = update_backups_list()
-//    }
-// }
-
 pipeline {
-    agent {
-        label 'master'
-    }
+    agent any
     options {
         buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '15'))
         timeout(time: 20, unit: 'MINUTES')
